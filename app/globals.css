@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 250 245 239; /* cream */
+    --foreground: 34 34 34; /* charcoal */
+  }
+  
+  body {
+    @apply bg-cream text-charcoal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
+  }
+  
+  .btn-primary {
+    @apply bg-tomato text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-opacity-90 hover:shadow-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-charcoal text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-opacity-90;
+  }
+  
+  .section-padding {
+    @apply px-4 md:px-8 lg:px-16 xl:px-24;
+  }
+  
+  .max-width-container {
+    @apply max-w-7xl mx-auto;
+  }
+}
