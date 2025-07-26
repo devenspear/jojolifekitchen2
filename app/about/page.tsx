@@ -33,8 +33,8 @@ export default function AboutPage() {
             className="relative aspect-[4/5] bg-warmGray/10 rounded-lg overflow-hidden"
           >
             <Image
-              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=750&fit=crop"
-              alt="Nancy Jo Spear"
+              src="/nancy-jo.png"
+              alt="Nancy Jo Spear in athletic heather"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

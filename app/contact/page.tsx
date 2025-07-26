@@ -2,6 +2,34 @@
 
 import { motion } from "framer-motion";
 import { Mail, MessageSquare, Briefcase, Instagram } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+
+function ObfuscatedEmail() {
+  // Split and obfuscate the email visually
+  const user = 'nancy';
+  const domain = 'lifekitchenstudios.com';
+  const at = String.fromCharCode(64); // '@'
+  const email = `${user}${at}${domain}`;
+
+  function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    // On click, reconstruct the mailto link
+    e.currentTarget.href = `mailto:${user}@${domain}`;
+  }
+
+  return (
+    <a
+      href="#"
+      className="text-tomato hover:underline"
+      onClick={handleClick}
+      style={{ unicodeBidi: 'bidi-override', direction: 'ltr' }}
+    >
+      {user}
+      <span style={{ display: 'none' }}>[at]</span>
+      <span aria-hidden="true">{at}</span>
+      {domain}
+    </a>
+  );
+}
 
 export default function ContactPage() {
   return (
@@ -48,12 +76,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg text-charcoal mb-1">Email</h3>
-                  <a 
-                    href="mailto:nancy@lifekitchenstudios.com"
-                    className="text-tomato hover:underline"
-                  >
-                    nancy@lifekitchenstudios.com
-                  </a>
+                  <ObfuscatedEmail />
                 </div>
               </div>
 

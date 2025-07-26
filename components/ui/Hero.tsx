@@ -26,75 +26,69 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto"
         >
-          {/* Animated Logo - 200% larger */}
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{
-              duration: 1.2,
-              ease: "easeOut",
-              delay: 0.3
-            }}
-            className="relative mx-auto mb-8"
-          >
-            <motion.div
-              animate={{ 
-                rotateY: [0, 360],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-              className="relative w-64 h-64 mx-auto"
-            >
-              <Image
-                src="/logo.png"
-                alt="Jo Joe's Life Kitchen Logo"
-                fill
-                className="object-contain drop-shadow-2xl"
-                priority
-              />
-            </motion.div>
+          {/* Static Logo with Subtle Animated Glow and Floating Elements */}
+          <div className="relative mx-auto mb-8 w-64 h-64">
+            <Image
+              src="/logo.png"
+              alt="Jo Joe's Life Kitchen Logo"
+              fill
+              className="object-contain drop-shadow-2xl"
+              priority
+            />
             
-            {/* Floating particles around logo */}
+            {/* Subtle Glow Effect */}
             <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "radial-gradient(circle, rgba(255,106,90,0.2) 0%, rgba(255,106,90,0) 70%)"
+              }}
               animate={{
-                rotate: 360,
+                scale: [1, 1.05, 1],
+                opacity: [0.5, 0.8, 0.5]
               }}
               transition={{
-                duration: 20,
+                duration: 3,
                 repeat: Infinity,
-                ease: "linear"
+                ease: "easeInOut"
               }}
-              className="absolute inset-0 pointer-events-none"
-            >
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-3 h-3 bg-tomato rounded-full opacity-60"
-                  style={{
-                    top: `${15 + Math.sin(i * Math.PI / 3) * 70}%`,
-                    left: `${15 + Math.cos(i * Math.PI / 3) * 70}%`,
-                  }}
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.6, 1, 0.6],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: i * 0.3,
-                  }}
-                />
-              ))}
-            </motion.div>
-          </motion.div>
+            />
+            
+            {/* Creative Subtle Floating Sparkles */}
+            {[...Array(4)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-2 h-2 bg-tomato rounded-full opacity-40"
+                style={{
+                  top: `${20 + Math.sin(i * Math.PI / 2) * 60}%`,
+                  left: `${20 + Math.cos(i * Math.PI / 2) * 60}%`,
+                }}
+                animate={{
+                  y: [-5, 5, -5],
+                  opacity: [0.4, 0.7, 0.4],
+                }}
+                transition={{
+                  duration: 4 + i,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.5,
+                }}
+              />
+            ))}
+            
+            {/* Gentle Hover Interaction */}
+            <motion.div
+              className="absolute inset-0"
+              whileHover={{
+                scale: 1.05,
+                transition: { duration: 0.3 }
+              }}
+            />
+          </div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="text-xl md:text-2xl text-charcoal/80 mb-4 font-lato"
           >
             Cook with joy and discover seasonal vibes
@@ -103,7 +97,7 @@ const Hero = () => {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
             className="text-lg text-warmGray mb-8 font-lato"
           >
             Joyful, practical meals from Nancy Jo Spear in Wilmington, NC
@@ -113,7 +107,7 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <motion.div
