@@ -2,6 +2,10 @@
 
 A modern, professional website for Nancy Jo Spear's culinary content creation brand, featuring social media video catalogs and an integrated Etsy shop.
 
+**Live Website**: [https://jojoeslifekitchen.com](https://jojoeslifekitchen.com)
+
+**Deployed**: July 26, 2025
+
 ## 🌟 Features
 
 - **Video Catalog**: Browse all TikTok and Instagram reels with search and filtering
