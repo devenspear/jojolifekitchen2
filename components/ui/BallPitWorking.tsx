@@ -79,16 +79,28 @@ const BallPitWorking: React.FC<BallPitProps> = ({
       // Apply gravity
       ball.vy += gravity * dt;
 
+      // Add subtle upward force to prevent balls from settling at bottom
+      const centerY = height * 0.4; // Target center at 40% from top
+      const distanceFromCenter = Math.abs(ball.y - centerY);
+      if (ball.y > centerY) {
+        const upwardForce = (ball.y - centerY) / height * 0.1;
+        ball.vy -= upwardForce * dt;
+      }
+
+      // Add some random floating motion
+      ball.vx += (Math.random() - 0.5) * 0.01 * dt;
+      ball.vy += (Math.random() - 0.5) * 0.01 * dt;
+
       // Mouse interaction - repulsion force
       if (followCursor) {
         const dx = ball.x - mouseRef.current.x;
         const dy = ball.y - mouseRef.current.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 100 && distance > 0) {
-          const force = (100 - distance) / 100;
-          const forceX = (dx / distance) * force * 0.5;
-          const forceY = (dy / distance) * force * 0.5;
+        if (distance < 120 && distance > 0) {
+          const force = (120 - distance) / 120;
+          const forceX = (dx / distance) * force * 0.8;
+          const forceY = (dy / distance) * force * 0.8;
           
           ball.vx += forceX * dt;
           ball.vy += forceY * dt;
@@ -98,6 +110,14 @@ const BallPitWorking: React.FC<BallPitProps> = ({
       // Apply friction
       ball.vx *= Math.pow(friction, dt);
       ball.vy *= Math.pow(friction, dt);
+
+      // Limit maximum velocity to prevent chaos
+      const maxVel = 3;
+      const vel = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+      if (vel > maxVel) {
+        ball.vx = (ball.vx / vel) * maxVel;
+        ball.vy = (ball.vy / vel) * maxVel;
+      }
 
       // Update position
       ball.x += ball.vx * dt;
@@ -115,9 +135,13 @@ const BallPitWorking: React.FC<BallPitProps> = ({
       if (ball.y + ball.radius > height) {
         ball.y = height - ball.radius;
         ball.vy *= -wallBounce;
+        // Add extra upward force when hitting bottom to prevent sticking
+        ball.vy -= 0.5;
       } else if (ball.y - ball.radius < 0) {
         ball.y = ball.radius;
         ball.vy *= -wallBounce;
+        // Add downward force when hitting top
+        ball.vy += 0.2;
       }
 
       // Ball-to-ball collisions

@@ -11,11 +11,11 @@ const Hero = () => {
       {/* Ball Pit Background */}
       <div className="absolute inset-0">
         <BallPitWorking 
-          className="w-full h-full opacity-60"
-          count={120}
-          gravity={0.7}
-          friction={0.995}
-          wallBounce={0.85}
+          className="w-full h-full opacity-70"
+          count={100}
+          gravity={0.2}
+          friction={0.98}
+          wallBounce={0.7}
           followCursor={true}
         />
       </div>
