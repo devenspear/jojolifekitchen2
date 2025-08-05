@@ -30,7 +30,7 @@ const Navigation = () => {
           >
             <div className="relative h-12 w-12">
               <Image
-                src="/logo-icon.png"
+                src="/logo-icon-transparent.png"
                 alt="JoJo's Life Kitchen"
                 fill
                 className="object-contain"
