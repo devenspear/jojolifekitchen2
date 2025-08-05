@@ -3,11 +3,25 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import BallPitWorking from "./BallPitWorking";
+
 const Hero = () => {
   return (
     <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
-      {/* Simple gradient background for now */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cream via-cream/90 to-tomato/20" />
+      {/* Ball Pit Background */}
+      <div className="absolute inset-0">
+        <BallPitWorking 
+          className="w-full h-full opacity-60"
+          count={120}
+          gravity={0.7}
+          friction={0.995}
+          wallBounce={0.85}
+          followCursor={true}
+        />
+      </div>
+      
+      {/* Simple gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cream/40 via-transparent to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 text-center section-padding">
