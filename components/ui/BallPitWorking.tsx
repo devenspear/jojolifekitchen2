@@ -23,9 +23,9 @@ interface Ball {
 
 const BallPitWorking: React.FC<BallPitProps> = ({
   count = 80,
-  gravity = 0.4,
-  friction = 0.98,
-  wallBounce = 0.7,
+  gravity = 0.05,
+  friction = 0.99,
+  wallBounce = 0.8,
   followCursor = true,
   className = ''
 }) => {
@@ -48,9 +48,9 @@ const BallPitWorking: React.FC<BallPitProps> = ({
   const createBall = useCallback((canvas: HTMLCanvasElement): Ball => {
     return {
       x: Math.random() * (canvas.width - 40) + 20,
-      y: Math.random() * (canvas.height - 40) + 20,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
+      y: Math.random() * (canvas.height * 0.7) + 20, // Keep balls in upper 70% initially
+      vx: (Math.random() - 0.5) * 1,
+      vy: (Math.random() - 0.5) * 1 - 0.5, // Slight upward initial velocity
       radius: Math.random() * 8 + 6,
       color: redColors[Math.floor(Math.random() * redColors.length)],
       mass: 1
@@ -76,20 +76,23 @@ const BallPitWorking: React.FC<BallPitProps> = ({
     const dt = Math.min(deltaTime / 16, 2); // Cap delta time for stability
 
     ballsRef.current.forEach((ball, i) => {
-      // Apply gravity
+      // Minimal gravity - almost weightless
       ball.vy += gravity * dt;
 
-      // Add subtle upward force to prevent balls from settling at bottom
-      const centerY = height * 0.4; // Target center at 40% from top
-      const distanceFromCenter = Math.abs(ball.y - centerY);
+      // Strong upward force to keep balls floating throughout the space
+      const centerY = height * 0.5; // Target center at middle
       if (ball.y > centerY) {
-        const upwardForce = (ball.y - centerY) / height * 0.1;
+        const upwardForce = Math.pow((ball.y - centerY) / height, 2) * 2;
         ball.vy -= upwardForce * dt;
       }
 
-      // Add some random floating motion
-      ball.vx += (Math.random() - 0.5) * 0.01 * dt;
-      ball.vy += (Math.random() - 0.5) * 0.01 * dt;
+      // Add continuous floating motion - like underwater
+      ball.vx += Math.sin(Date.now() * 0.001 + i) * 0.02 * dt;
+      ball.vy += Math.cos(Date.now() * 0.0008 + i) * 0.02 * dt;
+      
+      // Random brownian motion
+      ball.vx += (Math.random() - 0.5) * 0.03 * dt;
+      ball.vy += (Math.random() - 0.5) * 0.03 * dt;
 
       // Mouse interaction - repulsion force
       if (followCursor) {
@@ -135,13 +138,13 @@ const BallPitWorking: React.FC<BallPitProps> = ({
       if (ball.y + ball.radius > height) {
         ball.y = height - ball.radius;
         ball.vy *= -wallBounce;
-        // Add extra upward force when hitting bottom to prevent sticking
-        ball.vy -= 0.5;
+        // Strong upward force when hitting bottom to prevent sticking
+        ball.vy -= 1.5;
       } else if (ball.y - ball.radius < 0) {
         ball.y = ball.radius;
         ball.vy *= -wallBounce;
         // Add downward force when hitting top
-        ball.vy += 0.2;
+        ball.vy += 0.3;
       }
 
       // Ball-to-ball collisions

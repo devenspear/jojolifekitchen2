@@ -13,9 +13,9 @@ const Hero = () => {
         <BallPitWorking 
           className="w-full h-full opacity-70"
           count={100}
-          gravity={0.2}
-          friction={0.98}
-          wallBounce={0.7}
+          gravity={0.01}
+          friction={0.99}
+          wallBounce={0.8}
           followCursor={true}
         />
       </div>
