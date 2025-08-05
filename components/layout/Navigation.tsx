@@ -26,20 +26,17 @@ const Navigation = () => {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
           >
-            <div className="relative h-10 w-10">
+            <div className="relative h-12 w-12">
               <Image
-                src="/logo.png"
-                alt="JoJo's Life Kitchen Logo"
+                src="/logo-icon.png"
+                alt="JoJo's Life Kitchen"
                 fill
                 className="object-contain"
                 priority
               />
             </div>
-            <span className="font-playfair text-xl font-bold text-charcoal hidden sm:block">
-              Jo Joe&apos;s Life Kitchen
-            </span>
           </Link>
 
           {/* Desktop Navigation */}
