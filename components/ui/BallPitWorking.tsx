@@ -47,11 +47,11 @@ const BallPitWorking: React.FC<BallPitProps> = ({
 
   const createBall = useCallback((canvas: HTMLCanvasElement): Ball => {
     return {
-      x: Math.random() * (canvas.width - 40) + 20,
-      y: Math.random() * (canvas.height * 0.7) + 20, // Keep balls in upper 70% initially
-      vx: (Math.random() - 0.5) * 1,
-      vy: (Math.random() - 0.5) * 1 - 0.5, // Slight upward initial velocity
-      radius: Math.random() * 8 + 6,
+      x: Math.random() * (canvas.width - 20) + 10, // Use full width
+      y: Math.random() * (canvas.height - 20) + 10, // Use full height
+      vx: (Math.random() - 0.5) * 0.5, // Slower initial velocity
+      vy: (Math.random() - 0.5) * 0.5, // Slower initial velocity
+      radius: Math.random() * 6 + 4, // Smaller balls for less clustering
       color: redColors[Math.floor(Math.random() * redColors.length)],
       mass: 1
     };
@@ -79,20 +79,33 @@ const BallPitWorking: React.FC<BallPitProps> = ({
       // Minimal gravity - almost weightless
       ball.vy += gravity * dt;
 
-      // Strong upward force to keep balls floating throughout the space
-      const centerY = height * 0.5; // Target center at middle
-      if (ball.y > centerY) {
-        const upwardForce = Math.pow((ball.y - centerY) / height, 2) * 2;
-        ball.vy -= upwardForce * dt;
-      }
+      // Gentle distribution force - spreads balls throughout entire space
+      const targetX = (width / count) * i + (width / count) * 0.5; // Evenly distribute horizontally
+      const distanceFromTargetX = ball.x - targetX;
+      ball.vx -= distanceFromTargetX * 0.0001 * dt; // Very gentle horizontal spreading
 
-      // Add continuous floating motion - like underwater
-      ball.vx += Math.sin(Date.now() * 0.001 + i) * 0.02 * dt;
-      ball.vy += Math.cos(Date.now() * 0.0008 + i) * 0.02 * dt;
+      // Add continuous floating motion - slower and more random
+      ball.vx += Math.sin(Date.now() * 0.0003 + i * 1.7) * 0.008 * dt; // Slower sine wave
+      ball.vy += Math.cos(Date.now() * 0.0002 + i * 2.3) * 0.008 * dt; // Slower cosine wave
       
-      // Random brownian motion
-      ball.vx += (Math.random() - 0.5) * 0.03 * dt;
-      ball.vy += (Math.random() - 0.5) * 0.03 * dt;
+      // More random brownian motion for variety
+      ball.vx += (Math.random() - 0.5) * 0.015 * dt;
+      ball.vy += (Math.random() - 0.5) * 0.015 * dt;
+
+      // Anti-clustering force - balls push away from each other gently
+      ballsRef.current.forEach((other, j) => {
+        if (i !== j) {
+          const dx = ball.x - other.x;
+          const dy = ball.y - other.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 60 && distance > 0) { // Wider separation distance
+            const force = (60 - distance) / 60 * 0.02;
+            ball.vx += (dx / distance) * force * dt;
+            ball.vy += (dy / distance) * force * dt;
+          }
+        }
+      });
 
       // Mouse interaction - repulsion force
       if (followCursor) {
@@ -114,8 +127,8 @@ const BallPitWorking: React.FC<BallPitProps> = ({
       ball.vx *= Math.pow(friction, dt);
       ball.vy *= Math.pow(friction, dt);
 
-      // Limit maximum velocity to prevent chaos
-      const maxVel = 3;
+      // Limit maximum velocity to prevent chaos - slower movement
+      const maxVel = 1.5; // Reduced from 3 for slower movement
       const vel = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
       if (vel > maxVel) {
         ball.vx = (ball.vx / vel) * maxVel;
@@ -138,12 +151,12 @@ const BallPitWorking: React.FC<BallPitProps> = ({
       if (ball.y + ball.radius > height) {
         ball.y = height - ball.radius;
         ball.vy *= -wallBounce;
-        // Strong upward force when hitting bottom to prevent sticking
-        ball.vy -= 1.5;
+        // Gentle upward force when hitting bottom
+        ball.vy -= 0.3;
       } else if (ball.y - ball.radius < 0) {
         ball.y = ball.radius;
         ball.vy *= -wallBounce;
-        // Add downward force when hitting top
+        // Gentle downward force when hitting top
         ball.vy += 0.3;
       }
 
@@ -175,11 +188,11 @@ const BallPitWorking: React.FC<BallPitProps> = ({
           const relativeVelY = ball.vy - other.vy;
           const impulse = 2 * (relativeVelX * nx + relativeVelY * ny) / 2;
 
-          // Apply collision response
-          ball.vx -= impulse * nx * 0.8;
-          ball.vy -= impulse * ny * 0.8;
-          other.vx += impulse * nx * 0.8;
-          other.vy += impulse * ny * 0.8;
+          // Apply gentle collision response
+          ball.vx -= impulse * nx * 0.3; // Reduced from 0.8 for gentler collisions
+          ball.vy -= impulse * ny * 0.3;
+          other.vx += impulse * nx * 0.3;
+          other.vy += impulse * ny * 0.3;
         }
       }
     });
